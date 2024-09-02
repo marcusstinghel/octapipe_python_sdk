@@ -1,0 +1,4 @@
+venv
+octapipe_python_sdk/.env
+.idea
+test.py
