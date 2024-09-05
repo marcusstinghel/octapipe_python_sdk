@@ -66,7 +66,7 @@ class PipelineCard(PipelineCardModel):
         bearer_token = os.getenv("BEARER_TOKEN")
         if bearer_token is None:
             raise ValueError('login was not done, try use: wepipe_sdk.auth.login()')
-        self.__url = f'{os.getenv("API_URL")}/{self.__pipeline_endpoint}/{self.pipeline_uuid}/{self.__card_endpoint}'
+        self.__url = f'{os.getenv("API_URL")}/{self.__pipeline_endpoint}/{None}/{self.__card_endpoint}'
         self.__headers = {'Authorization': f'Bearer {bearer_token}'}
 
     def __validate_attributes(self, is_post=False, is_update=False, is_delete=False):
