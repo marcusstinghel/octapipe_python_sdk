@@ -1,11 +1,13 @@
-# Wepipe Python SDK
-This SDK provides an interface for interacting with the **wepipe API**. It includes methods for authentication and CRUD (Create, Read, Update, Delete) operations on various entities, such as Products, Files, Contacts, Companies, Users, Tasks, and Cards.
+# Octapipe Python SDK
+This SDK provides an interface for interacting with the **octapipe API**. It includes methods for authentication and CRUD (Create, Read, Update, Delete) operations on various entities, such as Database Records, Notes, Notifications, Pipeline Cards, Tasks and Users.
 
 ## Installation
 Install the SDK using pip:
 ```bash
-pip install git+https://github.com/octaworksllc/wepipe_python_sdk.git
+pip install git+https://github.com/octaworksllc/octapipe-python-sdk.git
 ```
+
+---
 
 ## Authentication
 Before using the SDK methods, you need to authenticate:
@@ -16,291 +18,256 @@ from octapipe_python_sdk import auth
 auth.login(domain='your_domain', email='your_email', password='your_password')
 ```
 
+---
 
-## Products
-### Create Product
+## Database Records
 
+### Create Database Record
 ```python
-from octapipe_python_sdk import Product
+from octapipe_python_sdk import DatabaseRecord
 
-product = Product(name='Product01', price=2.5, color='#0C80F2')
-product.post()
-```
-### Get Product
-
-```python
-from octapipe_python_sdk import Product
-
-product = Product.get(id=67618)
-```
-### Get All Products
-
-```python
-from octapipe_python_sdk import Product
-
-products = Product.get_all(page=1)
-```
-### Update Product
-
-```python
-from octapipe_python_sdk import Product
-
-product = Product.get(id=67619)
-product.name = 'Test Product 2'
-product.update()
-```
-### Delete Product
-
-```python
-from octapipe_python_sdk import Product
-
-product = Product(id=67619)
-product.delete()
-```
-
-
-## Files
-### Create File
-
-```python
-from octapipe_python_sdk import File
-
-file = File(
-    record_id=592332,
-    entity='deal',
-    name='file.png',
-    url='https://wepipe.s3.sa-east-1.amazonaws.com/your_file',
-    mime='image/png',
-    size=20270,
+database_record = DatabaseRecord(
+    database_uuid='8fd45fd2-1af8-485d-b1bc-74ccae9ac5ac',
+    name='Falcon III',
+    custom_fields_values={'cf_vehicle_type': 'Spaceship'}
 )
-file.post()
+database_record.post()
 ```
-### Get All Files
 
+### Get Database Record
 ```python
-from octapipe_python_sdk import File
+from octapipe_python_sdk import DatabaseRecord
 
-files = File.get_all(card_id=592332)
+database_record = DatabaseRecord.get(uuid='5f32bd52-e3b2-45e1-a9c6-1e7cfcdf116f')
 ```
-### Delete File
 
+### Get all Database Records
 ```python
-from octapipe_python_sdk import File
+from octapipe_python_sdk import DatabaseRecord
 
-file = File(id=175349)
-file.delete()
+database_records = DatabaseRecord.get_all(page=1)
 ```
 
-
-## Contacts
-### Create Contact
-
+### Update Database Record
 ```python
-from octapipe_python_sdk import Contact
+from octapipe_python_sdk import DatabaseRecord
 
-contact = Contact(first_name='Contact01')
-contact.post()
+database_record = DatabaseRecord.get(uuid='5f32bd52-e3b2-45e1-a9c6-1e7cfcdf116f')
+database_record.name = 'Falcon IV'
+database_record.update()
 ```
-### Get Contact
 
+### Delete Database Record
 ```python
-from octapipe_python_sdk import Contact
+from octapipe_python_sdk import DatabaseRecord
 
-contact = Contact.get(id=250512)
+database_record = DatabaseRecord(uuid='28b4ecf8-6d90-4809-a015-0342f9ac9e92')
+database_record.delete()
 ```
-### Get All Contacts
 
+---
+
+## Notes
+
+### Create Note
 ```python
-from octapipe_python_sdk import Contact
+from octapipe_python_sdk import Note
 
-contacts = Contact.get_all(page=1)
+note = Note(
+    entity='pipeline_card',
+    record_uuid='a5e15286-3e98-4230-b3af-5fdb9396761d',
+    note='The damage to the Falcon II was caused on a mission'
+)
+note.post()
 ```
-### Update Contact
 
+### Get all Notes
 ```python
-from octapipe_python_sdk import Contact
+from octapipe_python_sdk import Note
 
-contact = Contact.get(id=272332)
-contact.first_name = 'Contact02'
-contact.update()
+notes = Note.get_all(
+    entity='card', 
+    record_uuid='a5e15286-3e98-4230-b3af-5fdb9396761d', 
+    page=1
+)
 ```
-### Delete Contact
 
+### Delete Note
 ```python
-from octapipe_python_sdk import Contact
+from octapipe_python_sdk import Note
 
-contact = Contact(id=272332)
-contact.delete()
+note = Note(uuid='225ba90c-c527-42f0-b301-e1867f42de90')
+note.delete()
 ```
 
+---
 
-## Companies
-### Create Company
+## Notifications
 
+### Create Notification
 ```python
-from octapipe_python_sdk import Company
+from octapipe_python_sdk import Notification
 
-company = Company(company='Company01')
-company.post()
+notification = Notification(
+    owner_user_uuid='35f0796c-a720-49f6-bdc8-5bd61b9dc8f3',
+    entity='user',
+    record_uuid='24c1a5b4-a184-45d5-8b16-89de4428a0d8',
+    message='Falcon II is broken'
+)
 ```
-### Get Company
 
+### Get all Notifications
 ```python
-from octapipe_python_sdk import Company
+from octapipe_python_sdk import Notification
 
-company = Company.get(id=76482)
+notifications = Notification.get_all(page=1)
 ```
-### Get All Companies
 
+---
+
+## Pipeline Cards
+
+### Create Pipeline Card
 ```python
-from octapipe_python_sdk import Company
+from octapipe_python_sdk import PipelineCard
 
-companies = Company.get_all(page=1)
-```
-### Update Company
+pipeline_card = PipelineCard(
+    name='Falcon II',
+    pipeline_stage_uuid='a44a6961-08f6-4adb-864a-34896cb9bc70',
+    sla=24,
+    custom_fields_values={'cf_vehicle_condition': 'broken'}
+)
+pipeline_card.post()
+``` 
 
+### Get Card
 ```python
-from octapipe_python_sdk import Company
+from octapipe_python_sdk import PipelineCard
 
-company = Company.get(id=76484)
-company.company = 'Company02'
-company.update()
+pipeline_card = PipelineCard.get(uuid='91a1ff5e-36e5-4070-987c-52453371c970')
 ```
-### Delete Company
 
+### Get All PipelineCards
 ```python
-from octapipe_python_sdk import Company
+from octapipe_python_sdk import PipelineCard
 
-company = Company(id=76484)
-company.delete()
+cards = PipelineCard.get_all(page=1)
 ```
+
+### Update PipelineCard
+```python
+from octapipe_python_sdk import PipelineCard
+
+pipeline_card = PipelineCard.get(uuid='a5dcc9dd-57ba-4016-9d0a-330d0c76cbc2')
+pipeline_card.pipeline_stage_id = 15379
+pipeline_card.update()
+```
+
+### Delete PipelineCard
+```python
+from octapipe_python_sdk import PipelineCard
+
+pipeline_card = PipelineCard(uuid='a5dcc9dd-57ba-4016-9d0a-330d0c76cbc2')
+pipeline_card.delete()
+```
+
+---
+
+## Tasks
+
+### Create Task
+```python
+from octapipe_python_sdk import Task
+
+task = Task(
+    title='Fix Falcon II',
+    start_date='2024-09-05',
+    end_date='2024-09-15',
+    start_time='10:00',
+    end_time='10:00',
+    status='pending',
+    priority='medium',
+)
+task.post()
+```
+
+### Get Task
+```python
+from octapipe_python_sdk import Task
+
+task = Task.get(uuid='e77f58f8-2eb4-47b7-a840-07dc77c918c5')
+```
+
+### Get All Tasks
+```python
+from octapipe_python_sdk import Task
+
+tasks = Task.get_all(page=1)
+```
+
+### Update Task
+```python
+from octapipe_python_sdk import Task
+
+task = Task.get(uuid='e77f58f8-2eb4-47b7-a840-07dc77c918c5')
+task.priority = 'high'
+task.update()
+```
+
+### Delete Task
+```python
+from octapipe_python_sdk import Task
+
+task = Task(uuid='e77f58f8-2eb4-47b7-a840-07dc77c918c5')
+task.delete()
+```
+
+---
+
 ## Users
-### Create User
 
+### Create User
 ```python
 from octapipe_python_sdk import User
 
 user = User(
     first_name='Elon',
     last_name='Musk',
-    password='@Elon1234Musk',
+    email='elon.musk@tesla.com',
+    initial_password='@Elon1234Musk',
     role='admin',
-    email='elon.musk@tesla.com'
+    enabled_pipelines=['16aa1c40-fc0a-4bf2-afd6-d6c72edd852f', 'eed00ebf-9229-43c6-a705-50d6fe74befd']
 )
 user.post()
 ```
-### Get User
 
+### Get User
 ```python
 from octapipe_python_sdk import User
 
-user = User.get(id=2330)
+user = User.get(uuid='96ab2d88-47d9-4e3b-9bb3-9d7c82a14532')
 ```
-### Get All Users
 
+### Get All Users
 ```python
 from octapipe_python_sdk import User
 
 users = User.get_all(page=1)
 ```
-### Update User
 
+### Update User
 ```python
 from octapipe_python_sdk import User
 
-user = User.get(id=2691)
+user = User.get(uuid='96ab2d88-47d9-4e3b-9bb3-9d7c82a14532')
 user.email = 'elon.musk@spacex.com'
 user.update()
 ```
-### Delete User
 
+### Delete User
 ```python
 from octapipe_python_sdk import User
 
-user = User(id=2691)
+user = User(uuid='96ab2d88-47d9-4e3b-9bb3-9d7c82a14532')
 user.delete()
-```
-
-
-## Tasks
-### Create Task
-
-```python
-from octapipe_python_sdk import Task
-
-task = Task(task_type_id=910, start='2024-09-10 08:00:00', end='2024-09-10 20:00:00', responsible_user_id=2597)
-task.post()
-```
-### Get Task
-
-```python
-from octapipe_python_sdk import Task
-
-task = Task.get(id=96752)
-```
-### Get All Tasks
-
-```python
-from octapipe_python_sdk import Task
-
-tasks = Task.get_all(page=1)
-```
-### Update Task
-
-```python
-from octapipe_python_sdk import Task
-
-task = Task.get(id=102619)
-task.end = '2024-09-15 20:00:00'
-task.update()
-```
-### Delete Task
-
-```python
-from octapipe_python_sdk import Task
-
-task = Task(id=102619)
-task.delete()
-```
-
-
-## Cards
-### Create Card
-
-```python
-from octapipe_python_sdk import Card
-
-card = Card(name='Card01', pipeline_id=2272, pipeline_stage_id=15378)
-card.post()
-``` 
-### Get Card
-
-```python
-from octapipe_python_sdk import Card
-
-card = Card.get(id=592336)
-```
-### Get All Cards
-
-```python
-from octapipe_python_sdk import Card
-
-cards = Card.get_all(page=1)
-```
-### Update Card
-
-```python
-from octapipe_python_sdk import Card
-
-card = Card.get(id=592255)
-card.pipeline_stage_id = 15379
-card.update()
-```
-### Delete Card
-
-```python
-from octapipe_python_sdk import Card
-
-card = Card(id=592332)
-card.delete()
 ```
